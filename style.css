@@ -1,0 +1,149 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font: inherit;
+}
+
+button {
+  appearance: none;
+  border: none;
+  border-radius: 3px;
+  font: inherit;
+}
+
+:root {
+  --wintergreen-dream: #638475ff;
+  --granny-smith-apple: #90e39aff;
+  --key-lime: #ddf093ff;
+  --peach-puff: #f6d0b1ff;
+  --popstar: #ce4760ff;
+  --color-grey1: #222;
+  --color-grey2: #444;
+  --color-grey3: #666;
+  --color-grey4: #888;
+  --color-grey5: #aaa;
+  --color-grey6: #ccc;
+  --color-grey7: #ddd;
+  --color-bg: var(--wintergreen-dream);
+  --color-err: var(--popstar);
+  --color-right: var(--granny-smith-apple);
+  --color-txt: var(--color-grey7);
+  --color-accent: var(--key-lime);
+}
+
+body {
+  display: grid;
+  grid-template-rows: 20% 30% 30% 20%;
+  font-family: sans-serif;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  position: relative;
+  background-color: var(--color-bg);
+  color: var(--color-txt);
+}
+
+header {
+  display: grid;
+  grid-template-columns: 20% 60% 20%;
+  font-size: 120%;
+  text-align: center;
+  align-content: center;
+}
+
+.counter200 {
+  color: var(--color-right);
+}
+
+.timer {
+  font-size: 2rem;
+  color: var(--color-grey7);
+}
+
+.remaining {
+  font-size: 0.8rem;
+}
+
+.counter404 {
+  color: var(--peach-puff);
+}
+
+.btn-1,
+.btn-2 {
+  word-break: break-all;
+  width: 100%;
+  position: relative;
+  padding: 1rem;
+  background-color: var(--color-grey7);
+  color: var(--color-grey2);
+  transition: transform 0.2s;
+}
+
+.r200,
+.r404 {
+  transform: rotate3d(0, 1, 0, 180deg);
+}
+
+.r200::after,
+.r404::after {
+  transform: rotate3d(0, 1, 0, 180deg);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3rem;
+  content: '200';
+  color: var(--color-bg);
+  background-color: var(--color-right);
+}
+
+.r404::after {
+  content: '404';
+  color: var(--peach-puff);
+  background-color: var(--color-err);
+}
+
+.backdrop:not([hidden]) {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.backdrop-game-over > * {
+  margin-bottom: 1rem;
+}
+
+.btn-go {
+  text-transform: uppercase;
+  width: 80%;
+  padding: 2rem;
+  background-color: var(--color-accent);
+}
+
+.game-over {
+  padding: 2rem;
+  border-radius: 3px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--color-accent);
+  color: var(--color-grey1);
+  text-align: center;
+  line-height: 2;
+}
+
+.play-again {
+  padding: 2rem;
+}

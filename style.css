@@ -51,21 +51,38 @@ header {
   align-content: center;
 }
 
-.counter200 {
-  color: var(--color-right);
+.tot200,
+.tot404 {
+  border-radius: 3px;
+  color: var(--color-grey2);
+}
+
+.tot200 > *:first-child,
+.tot404 > *:first-child {
+  border-bottom: solid 2px var(--color-bg);
+}
+
+.tot200 > *,
+.tot404 > * {
+  padding: 0.5rem 1rem 0.25rem;
+}
+
+.tot200 {
+  background-color: var(--color-right);
 }
 
 .timer {
   font-size: 2rem;
   color: var(--color-grey7);
+  margin-bottom: 0.5rem;
 }
 
 .remaining {
   font-size: 0.8rem;
 }
 
-.counter404 {
-  color: var(--peach-puff);
+.tot404 {
+  background-color: var(--peach-puff);
 }
 
 .btn-1,
@@ -113,37 +130,30 @@ header {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  color: var(--color-grey7);
 }
 
 .backdrop-game-over > * {
   margin-bottom: 1rem;
 }
 
-.btn-go {
+.btn-go,
+.play-again {
   text-transform: uppercase;
   width: 80%;
   padding: 2rem;
-  background-color: var(--color-accent);
+  background-color: var(--color-grey6);
+  border-top: solid 6px var(--color-accent);
 }
 
-.game-over {
-  padding: 2rem;
-  border-radius: 3px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: var(--color-accent);
-  color: var(--color-grey1);
+.instructions {
+  width: 80%;
+  line-height: 1.5;
   text-align: center;
-  line-height: 2;
-}
-
-.play-again {
-  padding: 2rem;
+  margin-bottom: 2rem;
 }

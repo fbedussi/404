@@ -10,7 +10,8 @@ const backdropGameOverEl = document.querySelector('.backdrop-game-over');
 const resultEl = document.querySelector('.result');
 const playAgainEl = document.querySelector('.play-again');
 
-const INITIAL_TIMER = 5;
+const INITIAL_TIMER = 3;
+const MAX_QUESTIONS = 10;
 
 const initialState = {
   links: [
@@ -57,7 +58,7 @@ const initialState = {
 };
 let state = {
   ...initialState,
-  remaining: initialState.links.length,
+  remaining: Math.min(MAX_QUESTIONS, initialState.links.length),
 };
 // STATUS          -> 200
 // ready -> play /        \ -> play -> over
@@ -127,14 +128,16 @@ subscribe('status', ({ status, btn200, tot200, tot404, links, usedLinks }) => {
       break;
   }
 });
+
+function splitPath(path) {
+  return path.replace(/\//g, '/\n');
+}
+
 subscribe('link200', ({ link200, link404, btn200 }) => {
-  if (btn200 === 1) {
-    btn1El.innerText = link200;
-    btn2El.innerText = link404;
-  } else {
-    btn1El.innerText = link404;
-    btn2El.innerText = link200;
-  }
+  const btn1Text = btn200 === 1 ? link200 : link404;
+  const btn2Text = btn200 === 1 ? link404 : link200;
+  btn1El.innerText = splitPath(btn1Text);
+  btn2El.innerText = splitPath(btn2Text);
 });
 
 function startTimer() {
@@ -184,13 +187,11 @@ function wrongify(link) {
   return link404;
 }
 
-function splitDomain(link) {
-  const [_, domain, path] = link.match(/([^/]+)(.*)/);
-  return `${domain}\n${path}`;
-}
-
 function setNextQuestion() {
-  if (state.usedLinks.length === state.links.length) {
+  if (
+    state.usedLinks.length === MAX_QUESTIONS ||
+    state.usedLinks.length === state.links.length
+  ) {
     setState({ status: 'over' });
     return;
   }
@@ -200,7 +201,7 @@ function setNextQuestion() {
   while (state.usedLinks.includes(nextQuestionIndex)) {
     nextQuestionIndex = getIndex();
   }
-  const link200 = splitDomain(state.links[nextQuestionIndex]);
+  const link200 = state.links[nextQuestionIndex];
   const link404 = wrongify(link200);
   const usedLinks = state.usedLinks.concat(nextQuestionIndex);
   setState({
@@ -208,7 +209,8 @@ function setNextQuestion() {
     btn200: Math.random() > 0.5 ? 1 : 2,
     link200,
     link404,
-    remaining: state.links.length - usedLinks.length,
+    remaining:
+      Math.min(MAX_QUESTIONS, initialState.links.length) - usedLinks.length,
   });
 }
 

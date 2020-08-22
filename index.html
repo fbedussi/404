@@ -5,7 +5,7 @@
   </head>
   <body>
     <header>
-      <div>
+      <div class="tot404">
         <div>404</div>
         <div class="counter404">0</div>
       </div>
@@ -16,7 +16,7 @@
           <span class="remaining-counter"></span>
         </div>
       </div>
-      <div>
+      <div class="tot200">
         <div>200</div>
         <div class="counter200">0</div>
       </div>
@@ -24,10 +24,17 @@
     <button class="btn-1"></button>
     <button class="btn-2"></button>
     <div class="backdrop backdrop-go">
+      <div class="instructions">
+        You will see 2 URLs: one of them is correct and will result in a http
+        200 response code. One is wrong and will result in a http 404 response
+        code.
+        <br />
+        Try to click the right URL
+      </div>
       <button class="btn-go">go</button>
     </div>
     <div class="backdrop backdrop-game-over" hidden>
-      <div>game over!</div>
+      <div>GAME OVER</div>
       <div class="result"></div>
       <button class="play-again">play again</button>
     </div>

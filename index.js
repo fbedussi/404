@@ -45,6 +45,20 @@ const initialState = {
     'material-ui.com/components/cards',
     'socket.io/docs/client-api',
     'www.w3schools.com/CSS/css_list.asp',
+    'www.tutorialspoint.com/gitlab/gitlab_ci_cd_variables.htm',
+    'www.npmjs.com/package/history',
+    'reactjs.org/docs/hooks-reference.html',
+    'dev.to/miangame/how-to-automate-a-deploy-in-a-vps-with-github-actions-via-ssh-101e',
+    'www.commitstrip.com/en/2016/08/25/a-very-comprehensive-and-precise-spec',
+    'www.11ty.dev/docs/advanced',
+    'learning.postman.com/docs/sending-requests/authorization',
+    'developers.google.com/maps/documentation/javascript/places-autocomplete',
+    'css-tricks.com/bem-101',
+    'www.brembo.com/en/bike/replacement/brake-pads',
+    'www.brixton-motorcycles.com/models/crossfire-500',
+    'www.filamentgroup.com/lab/build-a-blog',
+    'todoist.com/productivity-methods/eat-the-frog',
+    'www.wildguzzi.com/Picspage/Picsmain.htm',
   ],
   usedLinks: [],
   interval: undefined,
@@ -113,10 +127,12 @@ subscribe('status', ({ status, btn200, tot200, tot404, links, usedLinks }) => {
       });
       break;
     case '200':
+      clearInterval(state.interval);
       [btn1El, btn2El][btn200 - 1].classList.add('r200');
       setTimeout(() => setState({ status: 'play' }), 1000);
       break;
     case '404':
+      clearInterval(state.interval);
       const btn404 = btn200 === 1 ? 2 : 1;
       [btn1El, btn2El][btn404 - 1].classList.add('r404');
       setTimeout(() => setState({ status: 'play' }), 1000);
@@ -226,7 +242,7 @@ function wrongify(link) {
     deleteLetter,
     addLetter,
   ];
-  const wrongifySelected = Math.round(Math.random() * wrongifyFns.length);
+  const wrongifySelected = Math.round(Math.random() * (wrongifyFns.length - 1));
   const link404 = domain + wrongifyFns[wrongifySelected](path);
   return link404;
 }

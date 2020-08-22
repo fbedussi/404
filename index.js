@@ -166,8 +166,7 @@ function getPathIndex(path) {
   return Math.round(Math.random() * (path.length - 1));
 }
 
-function wrongify(link) {
-  const [_, domain, path] = link.match(/([^/]+)(.*)/);
+function insertRandomLetter(path) {
   let index = getPathIndex(path);
   let char = path[index];
   while (char === '/') {
@@ -178,12 +177,57 @@ function wrongify(link) {
   while (newChar === char) {
     newChar = getRandomChar();
   }
-  const link404 =
-    domain +
-    path
-      .split('')
-      .map((c, i) => (i === index ? newChar : c))
-      .join('');
+  return path
+    .split('')
+    .map((c, i) => (i === index ? newChar : c))
+    .join('');
+}
+
+function scrambleLetters(path) {
+  let index = getPathIndex(path);
+  while (path[index] === '/' || !path[index + 1] || path[index + 1] === '/') {
+    index = getPathIndex(path);
+  }
+  return path
+    .split('')
+    .map((c, i) =>
+      i === index ? path[index + 1] : i === index + 1 ? path[index] : c,
+    )
+    .join('');
+}
+
+function deleteLetter(path) {
+  let index = getPathIndex(path);
+  while (path[index] === '/') {
+    index = getPathIndex(path);
+  }
+  return path
+    .split('')
+    .map((c, i) => (i === index ? '' : c))
+    .join('');
+}
+
+function addLetter(path) {
+  let index = getPathIndex(path);
+  while (path[index] === '/') {
+    index = getPathIndex(path);
+  }
+  return path
+    .split('')
+    .map((c, i) => (i === index ? c + getRandomChar() : c))
+    .join('');
+}
+
+function wrongify(link) {
+  const [_, domain, path] = link.match(/([^/]+)(.*)/);
+  const wrongifyFns = [
+    insertRandomLetter,
+    scrambleLetters,
+    deleteLetter,
+    addLetter,
+  ];
+  const wrongifySelected = Math.round(Math.random() * wrongifyFns.length);
+  const link404 = domain + wrongifyFns[wrongifySelected](path);
   return link404;
 }
 

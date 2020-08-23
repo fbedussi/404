@@ -26,12 +26,14 @@
     <button class="btn-2"></button>
     <div class="backdrop backdrop-go">
       <div class="instructions">
+        <div class="title">404</div>
         You will see 2 URLs:
         <br />
         one of them is correct and will result in a http
         <span class="code200">200</span> response code.
         <br />
-        One is wrong and will result in a http
+        One has a wrong path (the domain is always correct) and will result in a
+        http
         <span class="code404">404</span> response code.
         <br />
         <br />
@@ -40,8 +42,10 @@
       <button class="btn-go">go</button>
     </div>
     <div class="backdrop backdrop-game-over" hidden>
-      <div>GAME OVER</div>
-      <div class="result"></div>
+      <div class="title">
+        <div>GAME OVER</div>
+        <div class="result"></div>
+      </div>
       <button class="play-again">play again</button>
     </div>
     <script src="sound.js" type="module"></script>

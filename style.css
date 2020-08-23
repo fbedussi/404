@@ -166,6 +166,12 @@ header {
   margin-bottom: 2rem;
 }
 
+.title {
+  font-size: 4rem;
+  font-family: monospace;
+  text-align: center;
+}
+
 .code200,
 .code404 {
   display: inline;

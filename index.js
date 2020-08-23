@@ -21,7 +21,7 @@ const playAgainEl = document.querySelector('.play-again');
 
 const INITIAL_TIMER = 3;
 const MAX_QUESTIONS = 10;
-const TIMER_INTERVAL = 1500;
+const TIMER_INTERVAL = 1000;
 
 const initialState = {
   links: [

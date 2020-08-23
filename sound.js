@@ -1,23 +1,12 @@
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 const masterGainNode = audioContext.createGain();
 masterGainNode.connect(audioContext.destination);
-masterGainNode.gain.value = 20;
-let sineTerms = new Float32Array([0, 0, 1, 0, 1]);
-let cosineTerms = new Float32Array(sineTerms.length);
-let customWaveform = audioContext.createPeriodicWave(cosineTerms, sineTerms);
+masterGainNode.gain.value = 0.25;
 
 export function playTone(freq, duration = 500) {
-  let osc = audioContext.createOscillator();
+  const osc = audioContext.createOscillator();
   osc.connect(masterGainNode);
-
-  let type = 'square';
-
-  if (type == 'custom') {
-    osc.setPeriodicWave(customWaveform);
-  } else {
-    osc.type = type;
-  }
-
+  osc.type = 'square';
   osc.frequency.value = freq;
   osc.start();
 
@@ -37,4 +26,39 @@ export function play404sound() {
   return playTone(300, 150)
     .then(() => playTone(250, 200))
     .then(() => playTone(150, 250));
+}
+
+export function playWonTune() {
+  return playTone(440, 100)
+    .then(() => playTone(0, 50))
+    .then(() => playTone(440, 100))
+    .then(() => playTone(0, 50))
+    .then(() => playTone(400, 100))
+    .then(() => playTone(0, 50))
+    .then(() => playTone(700, 300));
+}
+
+export function playLooseTune() {
+  return playTone(300, 400)
+    .then(() => playTone(0, 100))
+    .then(() => playTone(300, 400))
+    .then(() => playTone(250, 200))
+    .then(() => playTone(100, 250));
+}
+
+const synth = window.speechSynthesis;
+const voices = synth.getVoices();
+const voice = voices.find(({ lang }) => lang === 'en-US');
+
+export function speak(text) {
+  const utterThis = new SpeechSynthesisUtterance(text);
+  utterThis.voice = voice;
+  utterThis.pitch = 1;
+  utterThis.rate = 1;
+  utterThis.volume = 1;
+
+  return new Promise(res => {
+    utterThis.onend = res;
+    synth.speak(utterThis);
+  });
 }

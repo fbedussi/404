@@ -1,4 +1,11 @@
-import { playTone, play200sound, play404sound } from './sound.js';
+import {
+  playTone,
+  play200sound,
+  play404sound,
+  playWonTune,
+  playLooseTune,
+  speak,
+} from './sound.js';
 
 const counter404El = document.querySelector('.counter404');
 const timerEl = document.querySelector('.timer');
@@ -14,6 +21,7 @@ const playAgainEl = document.querySelector('.play-again');
 
 const INITIAL_TIMER = 3;
 const MAX_QUESTIONS = 10;
+const TIMER_INTERVAL = 1500;
 
 const initialState = {
   links: [
@@ -152,25 +160,19 @@ subscribe('status', ({ status, btn200, tot200, tot404, links, usedLinks }) => {
       break;
     case 'over':
       const won = tot200 > tot404;
-      if (won) {
-        playTone(440, 100)
-          .then(() => playTone(0, 50))
-          .then(() => playTone(440, 100))
-          .then(() => playTone(0, 50))
-          .then(() => playTone(400, 100))
-          .then(() => playTone(0, 50))
-          .then(() => playTone(700, 300));
-      } else {
-        playTone(300, 400)
-          .then(() => playTone(0, 100))
-          .then(() => playTone(300, 400))
-          .then(() => playTone(250, 200))
-          .then(() => playTone(100, 250));
-      }
 
       clearInterval(state.interval);
       setState({ timer: INITIAL_TIMER });
-      resultEl.innerText = won ? 'You won!' : 'You loose!';
+      const result = won ? 'You won!' : 'You loose!';
+      resultEl.innerText = result;
+      speak(result).then(() => {
+        if (won) {
+          playWonTune();
+        } else {
+          playLooseTune();
+        }
+      });
+
       break;
   }
 });
@@ -189,12 +191,15 @@ subscribe('link200', ({ link200, link404, btn200 }) => {
 function startTimer() {
   clearInterval(state.interval);
   playTone(440, 100);
+  speak(INITIAL_TIMER);
 
   setState({
     timer: INITIAL_TIMER,
     interval: setInterval(() => {
-      setState({ timer: state.timer - 1 });
-    }, 1000),
+      const timer = state.timer - 1;
+      timer >= 0 && speak(timer);
+      setState({ timer });
+    }, TIMER_INTERVAL),
   });
 }
 

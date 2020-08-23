@@ -131,12 +131,6 @@ subscribe('status', ({ status, btn200, tot200, tot404, links, usedLinks }) => {
       playTone(600, 100);
       break;
     case 'play':
-      playTone(440, 100);
-
-      // playTone(49, 100)
-      //   .then(() => playTone(58, 100))
-      //   .then(() => playTone(27, 100))
-      //   .then(() => playTone(37, 100));
       setNextQuestion();
       [btn1El, btn2El].forEach(btn => {
         btn.classList.remove('r200');
@@ -194,6 +188,8 @@ subscribe('link200', ({ link200, link404, btn200 }) => {
 
 function startTimer() {
   clearInterval(state.interval);
+  playTone(440, 100);
+
   setState({
     timer: INITIAL_TIMER,
     interval: setInterval(() => {

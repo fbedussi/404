@@ -10,6 +10,7 @@ button {
   border: none;
   border-radius: 3px;
   font: inherit;
+  max-width: 500px;
 }
 
 html,
@@ -163,4 +164,20 @@ header {
   line-height: 1.5;
   text-align: center;
   margin-bottom: 2rem;
+}
+
+.code200,
+.code404 {
+  display: inline;
+  padding: 0.1rem 0.25rem;
+  border-radius: 2px;
+  color: var(--color-grey3);
+}
+
+.code200 {
+  background-color: var(--color-right);
+}
+
+.code404 {
+  background-color: var(--peach-puff);
 }

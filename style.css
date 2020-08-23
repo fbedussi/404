@@ -12,6 +12,11 @@ button {
   font: inherit;
 }
 
+html,
+body {
+  height: 100%;
+}
+
 :root {
   --wintergreen-dream: #638475ff;
   --granny-smith-apple: #90e39aff;
@@ -41,6 +46,8 @@ body {
   position: relative;
   background-color: var(--color-bg);
   color: var(--color-txt);
+  max-width: 500px;
+  margin: 0 auto;
 }
 
 header {

@@ -1,3 +1,5 @@
+import { playTone, play200sound, play404sound } from './sound.js';
+
 const counter404El = document.querySelector('.counter404');
 const timerEl = document.querySelector('.timer');
 const remainingEl = document.querySelector('.remaining-counter');
@@ -59,6 +61,11 @@ const initialState = {
     'www.filamentgroup.com/lab/build-a-blog',
     'todoist.com/productivity-methods/eat-the-frog',
     'www.wildguzzi.com/Picspage/Picsmain.htm',
+    'hasura.io/learn/graphql/react-rxdb-offline-first/frontend-setup',
+    'blog.panoply.io/couchdb-vs-mongodb',
+    'www.mongodb.com/collateral/the-offline-first-approach-to-mobile-app-development',
+    'dexie.org/docs/Syncable/Dexie.Syncable.ISyncProtocol',
+    'hasura.io/learn/graphql/hasura/authentication/5-test-with-headers',
   ],
   usedLinks: [],
   interval: undefined,
@@ -74,14 +81,15 @@ let state = {
   ...initialState,
   remaining: Math.min(MAX_QUESTIONS, initialState.links.length),
 };
-// STATUS          -> 200
+// STATUS
+//                 -> 200
 // ready -> play /        \ -> play -> over
 //               \        /
 //                 -> 404
 let subscribers = [];
 
 function setState(update) {
-  nextState = {
+  const nextState = {
     ...state,
     ...update,
   };
@@ -119,7 +127,16 @@ subscribe('status', ({ status, btn200, tot200, tot404, links, usedLinks }) => {
   backdropGameOverEl.hidden = status !== 'over';
   backdropGoEl.hidden = status !== 'ready';
   switch (status) {
+    case 'ready':
+      playTone(600, 100);
+      break;
     case 'play':
+      playTone(440, 100);
+
+      // playTone(49, 100)
+      //   .then(() => playTone(58, 100))
+      //   .then(() => playTone(27, 100))
+      //   .then(() => playTone(37, 100));
       setNextQuestion();
       [btn1El, btn2El].forEach(btn => {
         btn.classList.remove('r200');
@@ -127,20 +144,39 @@ subscribe('status', ({ status, btn200, tot200, tot404, links, usedLinks }) => {
       });
       break;
     case '200':
+      play200sound();
       clearInterval(state.interval);
       [btn1El, btn2El][btn200 - 1].classList.add('r200');
       setTimeout(() => setState({ status: 'play' }), 1000);
       break;
     case '404':
+      play404sound();
       clearInterval(state.interval);
       const btn404 = btn200 === 1 ? 2 : 1;
       [btn1El, btn2El][btn404 - 1].classList.add('r404');
       setTimeout(() => setState({ status: 'play' }), 1000);
       break;
     case 'over':
+      const won = tot200 > tot404;
+      if (won) {
+        playTone(440, 100)
+          .then(() => playTone(0, 50))
+          .then(() => playTone(440, 100))
+          .then(() => playTone(0, 50))
+          .then(() => playTone(400, 100))
+          .then(() => playTone(0, 50))
+          .then(() => playTone(700, 300));
+      } else {
+        playTone(300, 400)
+          .then(() => playTone(0, 100))
+          .then(() => playTone(300, 400))
+          .then(() => playTone(250, 200))
+          .then(() => playTone(100, 250));
+      }
+
       clearInterval(state.interval);
       setState({ timer: INITIAL_TIMER });
-      resultEl.innerText = tot200 > tot404 ? 'You won!' : 'You loose!';
+      resultEl.innerText = won ? 'You won!' : 'You loose!';
       break;
   }
 });

@@ -13,11 +13,13 @@ const remainingEl = document.querySelector('.remaining-counter');
 const counter200El = document.querySelector('.counter200');
 const btn1El = document.querySelector('.btn-1');
 const btn2El = document.querySelector('.btn-2');
+const btn3El = document.querySelector('.btn-3');
 const backdropGoEl = document.querySelector('.backdrop-go');
 const goEl = document.querySelector('.btn-go');
 const backdropGameOverEl = document.querySelector('.backdrop-game-over');
 const resultEl = document.querySelector('.result');
 const playAgainEl = document.querySelector('.play-again');
+const buttonsEl = [btn1El, btn2El, btn3El];
 
 const INITIAL_TIMER = 3;
 const MAX_QUESTIONS = 10;
@@ -84,6 +86,8 @@ const initialState = {
   timer: INITIAL_TIMER,
   link200: '',
   link404: '',
+  link404bis: '',
+  clickedBtn: undefined,
 };
 let state = {
   ...initialState,
@@ -140,7 +144,7 @@ subscribe('status', ({ status, btn200, tot200, tot404, links, usedLinks }) => {
       break;
     case 'play':
       setNextQuestion();
-      [btn1El, btn2El].forEach(btn => {
+      buttonsEl.forEach(btn => {
         btn.classList.remove('r200');
         btn.classList.remove('r404');
       });
@@ -148,14 +152,13 @@ subscribe('status', ({ status, btn200, tot200, tot404, links, usedLinks }) => {
     case '200':
       play200sound();
       clearInterval(state.interval);
-      [btn1El, btn2El][btn200 - 1].classList.add('r200');
+      buttonsEl[state.clickedBtn].classList.add('r200');
       setTimeout(() => setState({ status: 'play' }), 1000);
       break;
     case '404':
       play404sound();
       clearInterval(state.interval);
-      const btn404 = btn200 === 1 ? 2 : 1;
-      [btn1El, btn2El][btn404 - 1].classList.add('r404');
+      buttonsEl[state.clickedBtn].classList.add('r404');
       setTimeout(() => setState({ status: 'play' }), 1000);
       break;
     case 'over':
@@ -181,11 +184,12 @@ function splitPath(path) {
   return path.replace(/\//g, '/\n');
 }
 
-subscribe('link200', ({ link200, link404, btn200 }) => {
-  const btn1Text = btn200 === 1 ? link200 : link404;
-  const btn2Text = btn200 === 1 ? link404 : link200;
-  btn1El.innerText = splitPath(btn1Text);
-  btn2El.innerText = splitPath(btn2Text);
+subscribe('link200', ({ link200, link404, link404bis, btn200 }) => {
+  buttonsEl.forEach((buttonEl, index) => {
+    const text =
+      btn200 === index + 1 ? link200 : index < 2 ? link404 : link404bis;
+    buttonEl.innerText = splitPath(text);
+  });
 });
 
 function startTimer() {
@@ -300,12 +304,14 @@ function setNextQuestion() {
   }
   const link200 = state.links[nextQuestionIndex];
   const link404 = wrongify(link200);
+  const link404bis = wrongify(link200);
   const usedLinks = state.usedLinks.concat(nextQuestionIndex);
   setState({
     usedLinks,
-    btn200: Math.random() > 0.5 ? 1 : 2,
+    btn200: Math.round(Math.random() * buttonsEl.length),
     link200,
     link404,
+    link404bis,
     remaining:
       Math.min(MAX_QUESTIONS, initialState.links.length) - usedLinks.length,
   });
@@ -315,20 +321,23 @@ goEl.addEventListener('click', () => {
   setState({ status: 'play' });
 });
 
-[btn1El, btn2El].forEach((btn, index) => {
-  btn.addEventListener('click', () => {
+buttonsEl.forEach((btn, index) => {
+  btn.addEventListener('click', function() {
     if (state.status !== 'play') {
       return;
     }
+    const correct = state.btn200 === index + 1;
     setState(
-      state.btn200 === index + 1
+      correct
         ? {
             status: '200',
             tot200: state.tot200 + 1,
+            clickedBtn: index,
           }
         : {
             status: '404',
             tot404: state.tot404 + 1,
+            clickedBtn: index,
           },
     );
   });

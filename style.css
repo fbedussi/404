@@ -52,7 +52,7 @@ body {
   grid-template-rows: 20% 80%;
   font-family: sans-serif;
   gap: 0.5rem;
-  padding: 0.5rem;
+  padding: 1.5rem;
   position: relative;
   background-color: var(--color-bg);
   color: var(--color-txt);

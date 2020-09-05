@@ -59,6 +59,7 @@ export function speak(text) {
 
   return new Promise(res => {
     utterThis.onend = res;
+    synth.cancel();
     synth.speak(utterThis);
   });
 }

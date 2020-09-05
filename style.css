@@ -56,6 +56,7 @@ body {
   position: relative;
   background-color: var(--color-bg);
   color: var(--color-txt);
+  font-size: clamp(16px, 4vw, 22px);
 }
 
 .background {
@@ -228,7 +229,7 @@ main {
   display: inline;
   padding: 0.1rem 0.25rem;
   border-radius: 2px;
-  color: var(--color-grey3);
+  color: white;
 }
 
 .code200 {
